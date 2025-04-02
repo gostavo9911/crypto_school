@@ -6,9 +6,12 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
+import axios from 'axios';
+import { initializeAxios } from './lib/csrf';
 
 // Extend ImportMeta interface for Vite...
-declare module 'vite/client' {
+// @ts-ignore
+declare global {
     interface ImportMetaEnv {
         readonly VITE_APP_NAME: string;
         [key: string]: string | boolean | undefined;
@@ -20,16 +23,33 @@ declare module 'vite/client' {
     }
 }
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+// Initialize axios with CSRF token and credentials
+initializeAxios();
+
+// Set XMLHttpRequest header
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+// Log any axios errors to make debugging easier
+axios.interceptors.response.use(
+    response => response,
+    error => {
+        console.error('Axios error:', error.response || error);
+        return Promise.reject(error);
+    }
+);
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} - ${import.meta.env.VITE_APP_NAME || 'Laravel'}`,
     resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(ZiggyVue)
-            .mount(el);
+        const app = createApp({ render: () => h(App, props) });
+        app.use(plugin);
+        app.use(ZiggyVue);
+
+        // Define axios globally
+        app.config.globalProperties.$axios = axios;
+
+        app.mount(el);
     },
     progress: {
         color: '#4B5563',

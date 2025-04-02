@@ -2,7 +2,23 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
+import LessonCard from '@/components/lesson/LessonCard.vue';
+
+// Define props for receiving lessons from the backend
+defineProps<{
+    lessons: Array<{
+        id: number;
+        uuid: string;
+        title: string;
+        description: string;
+        thumbnail: string | null;
+        video_url: string;
+        duration: number;
+        difficulty: string;
+        created_at: string;
+        updated_at: string;
+    }>;
+}>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -13,23 +29,23 @@ const breadcrumbs: BreadcrumbItem[] = [
 </script>
 
 <template>
+
     <Head title="Lessons" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
-                </div>
+        <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold">Crypto School Lessons</h1>
             </div>
-            <div class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min">
-                <PlaceholderPattern />
+
+            <!-- Lessons Grid -->
+            <div class="grid auto-rows-min gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <template v-if="lessons.length">
+                    <LessonCard v-for="lesson in lessons" :key="lesson.id" :lesson="lesson" />
+                </template>
+                <div v-else class="col-span-full py-12 text-center">
+                    <p class="text-muted-foreground">No lessons available yet.</p>
+                </div>
             </div>
         </div>
     </AppLayout>

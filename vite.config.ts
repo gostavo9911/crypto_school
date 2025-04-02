@@ -33,4 +33,5 @@ export default defineConfig({
             plugins: [tailwindcss, autoprefixer],
         },
     },
+    assetsInclude: ['**/*.svg'],
 });
