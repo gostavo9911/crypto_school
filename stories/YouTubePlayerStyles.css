@@ -1,0 +1,46 @@
+/* YouTube Player specific styles for Storybook */
+
+/* Custom aspect ratio container for player */
+.player-container {
+    @apply relative w-full overflow-hidden rounded-lg bg-black;
+    aspect-ratio: 16/9;
+}
+
+/* Control button styles */
+.player-button {
+    @apply flex items-center justify-center rounded-full bg-black/30 p-2 text-white transition-colors hover:bg-black/50;
+}
+
+/* Progress bar styles */
+.progress-bar {
+    @apply h-1 overflow-hidden rounded-full bg-gray-700;
+}
+
+.progress-fill {
+    @apply h-full rounded-full;
+}
+
+/* Popup styles */
+.popup-container {
+    @apply absolute inset-0 z-50 flex items-center justify-center bg-black/80 p-4;
+}
+
+.popup-content {
+    @apply w-full max-w-md overflow-hidden rounded-lg bg-white shadow-lg dark:bg-gray-800;
+}
+
+/* Dark mode compatibility */
+.dark .player-container {
+    @apply bg-gray-900;
+}
+
+.dark .progress-bar {
+    @apply bg-gray-800;
+}
+
+/* Responsive sizing */
+@media (max-width: 640px) {
+    .player-controls {
+        @apply p-2;
+    }
+}

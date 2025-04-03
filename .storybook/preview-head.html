@@ -1,0 +1,25 @@
+<style>
+    /* Ensure font loading is consistent with the app */
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+    /* Fix for dark mode toggle in Storybook */
+    .dark {
+        color-scheme: dark;
+    }
+
+    /* Additional story-specific styles can go here */
+    .sb-show-main {
+        transition: background-color 0.3s;
+    }
+</style>
+
+<script>
+    // Helper to toggle dark mode class in the preview iframe
+    window.toggleDarkMode = (isDark) => {
+        if (isDark) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }
+</script>

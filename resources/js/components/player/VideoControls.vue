@@ -15,7 +15,6 @@ const props = defineProps<{
     isFullscreen: boolean;
     showControls: boolean;
     playbackRate: number;
-    progressBarColor?: string;
 }>();
 
 const emit = defineEmits<{
@@ -95,7 +94,7 @@ const onPlaybackRateChange = (rate: number) => {
 
             <!-- Actual progress -->
             <div class="absolute left-0 top-0 h-full"
-                :style="{ width: `${progressPercentage}%`, backgroundColor: progressBarColor || defaultProgressBarColor }">
+                :style="{ width: `${progressPercentage}%`, backgroundColor: defaultProgressBarColor }">
                 <!-- Progress thumb/handle -->
                 <div class="absolute -right-2 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white shadow-md opacity-0 transition-opacity group-hover/progress:opacity-100"
                     :class="{ 'top-0 h-3 w-3': !isPlaying || showControls }"></div>

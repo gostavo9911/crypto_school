@@ -14,7 +14,7 @@ const props = defineProps<{
     videoId: string;
     lessonId?: string;
     poster?: string;
-    logo?: string;
+    logo?: boolean;
     progressBarColor?: string;
     popupContent?: string;
     popupType?: 'quiz' | 'cta';
@@ -309,8 +309,8 @@ watch(() => isPlaying.value, (isPlaying) => {
             @playback-rate-change="handlePlaybackRateChange" />
 
         <!-- Optional popup -->
-        <VideoPopup v-if="currentPopup" :id="currentPopup.id" :uuid="currentPopup.uuid" :type="currentPopup.type"
-            :title="currentPopup.title" :content="currentPopup.content" :visible="showPopup"
+        <VideoPopup v-if="currentPopup" :id="String(currentPopup.id)" :uuid="currentPopup.uuid"
+            :type="currentPopup.type" :title="currentPopup.title" :content="currentPopup.content" :visible="showPopup"
             :options="currentPopup.options" :is-skippable="currentPopup.is_skippable" @close="closePopup"
             @answer-submitted="handlePopupSubmitted" />
     </div>

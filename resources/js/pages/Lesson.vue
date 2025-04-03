@@ -94,7 +94,7 @@ const quizContent = `
             <!-- YouTube Video Player -->
             <div class="relative w-full overflow-hidden rounded-xl">
                 <YouTubePlayer :videoId="videoId" :lessonId="lesson.uuid" logo="/images/logo-icon.png"
-                    progressBarColor="#10B981" :title="lesson.title" />
+                    :title="lesson.title" />
             </div>
 
             <!-- Lesson Description -->
