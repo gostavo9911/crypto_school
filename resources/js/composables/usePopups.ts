@@ -2,7 +2,7 @@ import { ref, Ref, watch } from 'vue';
 import axios from 'axios';
 
 export interface Popup {
-    id: number;
+    id?: number;
     uuid?: string;
     title?: string;
     content?: string;
@@ -105,8 +105,8 @@ export function usePopups(
                 !showPopup.value
             ) {
                 currentPopup.value = {
-                    id: null,
-                    title: null,
+                    id: undefined,
+                    title: undefined,
                     content: defaultPopupContent,
                     type: defaultPopupType as 'quiz' | 'cta',
                     is_skippable: true
@@ -119,7 +119,7 @@ export function usePopups(
     };
 
     const closePopup = () => {
-        // Track answered quiz popups
+
         if (currentPopup.value &&
             currentPopup.value.type === 'quiz' &&
             currentPopup.value.id &&

@@ -79,6 +79,20 @@ const getFeedbackMessage = () => {
         : 'Not quite right. Try again next time.';
 };
 
+// Handle CTA button click
+const handleCtaAction = () => {
+    if (props.content && (props.content.startsWith('http') || props.content.startsWith('/'))) {
+        // Assuming content is a URL
+        window.open(props.content, '_blank');
+        // Optionally close popup immediately, or let the navigation handle it.
+        // For now, we'll close it.
+        closePopup();
+    } else {
+        // Default action if content is not a URL or is empty
+        closePopup();
+    }
+};
+
 // Computed properties for styling
 const buttonClasses = computed(() =>
     'w-full rounded-md px-4 py-3 text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm transition-all duration-200'
@@ -206,11 +220,8 @@ const ctaButtonClasses = computed(() =>
                         <!-- CTA popup -->
                         <div v-else class="space-y-4">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ title || 'Next Steps' }}</h3>
-                            <div class="text-gray-700 dark:text-gray-200 prose dark:prose-invert prose-sm max-w-none"
-                                v-html="content || 'Ready to continue learning?'">
-                            </div>
                             <div class="mt-6 flex justify-center">
-                                <button @click="closePopup" :class="ctaButtonClasses">Continue</button>
+                                <button @click="handleCtaAction" :class="ctaButtonClasses">Continue</button>
                             </div>
                         </div>
                     </div>

@@ -62,10 +62,23 @@ class VideoPopupsSeeder extends Seeder
             [
                 'uuid' => Str::uuid()->toString(),
                 'lesson_id' => 2,
+                'title' => 'Sign up for Blofin today and start trading!',
+                'content' => 'https://blofin.com',
+                'type' => 'cta',
+                'appear_at' => 10,
+                'is_skippable' => true,
+                'is_active' => true,
+                'options' => null, // CTA popups don't need options
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'uuid' => Str::uuid()->toString(),
+                'lesson_id' => 2,
                 'title' => 'Blofin Platform',
                 'content' => 'Which of the following is a key feature of Blofin?',
                 'type' => 'quiz',
-                'appear_at' => 40,
+                'appear_at' => 16,
                 'is_skippable' => false,
                 'is_active' => true,
                 'options' => json_encode([
