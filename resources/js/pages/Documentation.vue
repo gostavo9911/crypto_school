@@ -36,8 +36,11 @@ const breadcrumbs: BreadcrumbItem[] = [
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                     <pre class="bg-gray-50 dark:bg-gray-700 p-4 rounded overflow-x-auto text-sm">
   composer install
+  php artisan migrate --seed
   npm run build   # Or use: npm run dev
-  npm run storybook</pre>
+  npm run storybook
+  php artisan serve
+#Or run with herd</pre>
                 </div>
             </section>
 
