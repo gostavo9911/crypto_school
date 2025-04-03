@@ -80,14 +80,27 @@ const getFeedbackMessage = () => {
 };
 
 // Handle CTA button click
-const handleCtaAction = () => {
+const handleCtaAction = async () => {
     if (props.content && (props.content.startsWith('http') || props.content.startsWith('/'))) {
+
+        // Track CTA engagement
+        await axios.post(`/popups/${props.uuid}/submit`, {
+            type: 'cta',
+            action: 'open',
+            response_time_seconds: Math.floor((Date.now() - responseTimeStart.value) / 1000)
+        });
         // Assuming content is a URL
         window.open(props.content, '_blank');
-        // Optionally close popup immediately, or let the navigation handle it.
-        // For now, we'll close it.
+
         closePopup();
     } else {
+        // Track CTA engagement
+        await axios.post(`/popups/${props.uuid}/submit`, {
+            type: 'cta',
+            action: 'close',
+            response_time_seconds: Math.floor((Date.now() - responseTimeStart.value) / 1000)
+        });
+
         // Default action if content is not a URL or is empty
         closePopup();
     }

@@ -25,8 +25,10 @@ return new class extends Migration
             $table->json('metadata')->nullable()->comment('Additional metadata');
             $table->timestamps();
 
-            // Create a unique constraint to prevent duplicate submissions
-            $table->unique(['user_id', 'video_popup_id']);
+            // We allow multiple submissions for CTA popups
+
+            // Add index for popup_type
+            $table->index('metadata->popup_type', 'popup_type_index');
         });
     }
 

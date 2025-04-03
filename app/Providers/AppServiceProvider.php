@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Feature::define('player-popups', function (User $user) {
+        Feature::define('cta-popups', function (User $user) {
             if ($user->isAdmin()) {
                 return true;
             }

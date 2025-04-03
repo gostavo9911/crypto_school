@@ -14,7 +14,7 @@ class VideoPopupSubmissionController extends Controller
     /**
      * Display a listing of the user's submissions.
      */
-    public function index(Request $request)
+    public function index()
     {
         $user = Auth::user();
         $submissions = VideoPopupSubmission::where('user_id', $user->id)
@@ -39,6 +39,8 @@ class VideoPopupSubmissionController extends Controller
     public function store(Request $request, $videoPopupUuid)
     {
         $validator = Validator::make($request->all(), [
+            'type' => 'required|string|in:quiz,cta',
+            'action' => 'required_if:type,cta|string|in:open,close',
             'answer' => 'required_if:type,quiz',
             'answer_data' => 'nullable|array',
             'response_time_seconds' => 'nullable|integer',
@@ -52,9 +54,36 @@ class VideoPopupSubmissionController extends Controller
         $videoPopup = VideoPopup::where('uuid', $videoPopupUuid)->firstOrFail();
         $user = Auth::user();
 
-        // Check if user already submitted an answer for this popup
+        // For CTA popups, we'll always create a submission tracking the action
+        if ($request->input('type') === 'cta') {
+            $submission = VideoPopupSubmission::create([
+                'uuid' => Str::uuid(),
+                'user_id' => $user->id,
+                'video_popup_id' => $videoPopup->id,
+                'lesson_id' => $videoPopup->lesson_id,
+                'answer' => $request->input('action'), // 'open' or 'close'
+                'answer_data' => null,
+                'is_correct' => null, // Not applicable for CTA
+                'responded_at' => now(),
+                'response_time_seconds' => $request->input('response_time_seconds'),
+                'metadata' => [
+                    'popup_type' => 'cta'
+                ]
+            ]);
+
+            return response()->json([
+                'data' => $submission,
+                'message' => 'CTA interaction recorded successfully'
+            ]);
+        }
+
+        // For quiz popups, check if user already submitted an answer
         $existingSubmission = VideoPopupSubmission::where('user_id', $user->id)
             ->where('video_popup_id', $videoPopup->id)
+            ->where(function ($query) {
+                $query->whereNull('metadata->popup_type')
+                    ->orWhere('metadata->popup_type', 'quiz');
+            })
             ->first();
 
         if ($existingSubmission) {
@@ -90,6 +119,9 @@ class VideoPopupSubmissionController extends Controller
             'is_correct' => $isCorrect,
             'responded_at' => now(),
             'response_time_seconds' => $request->input('response_time_seconds'),
+            'metadata' => [
+                'popup_type' => 'quiz'
+            ]
         ]);
 
         return response()->json([
