@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\LessonsController;
 use App\Http\Controllers\VideoPopupController;
 use App\Http\Controllers\VideoPopupSubmissionController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -14,6 +15,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    // Dashboard Metrics API
+    Route::get('dashboard/metrics', [DashboardController::class, 'index'])
+        ->name('dashboard.metrics');
+
+    // documentation page
+    Route::get('documentation', function () {
+        return Inertia::render('Documentation');
+    })->name('documentation');
 
     // Lessons routes
     Route::get('lessons', [LessonsController::class, 'index'])->name('lessons');
